@@ -1,7 +1,6 @@
 :host {
   display: grid;
   position: relative;
-  background-color:red;
   width: min-content;
 }
 
@@ -55,11 +54,11 @@ video {
   bottom: 0;
   left: 0;
   right: 0;
-  /*height: 36px;*/
   background-color: rgba(0, 0, 0, 0.51);
   transition: opacity .3s ease-in-out;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   padding: 8px;
   box-sizing: border-box;
@@ -70,6 +69,15 @@ video {
   opacity: 0;
 }
 
+.control-pane__column {
+  display: inline-flex;
+}
+
+.control-pane__column_center {
+  flex-grow: 1;
+}
+
 .control-pane__button {
   width: 36px;
+  margin: 0 8px;
 }
