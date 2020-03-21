@@ -25,7 +25,7 @@ export class VidCom {
   /**
    * Whether the video's sound is always disabled and can't be enabled
    */
-  @Prop({ attribute: 'muted' }) isAlwaysMuted: boolean = false;
+  @Prop({attribute: 'muted'}) isAlwaysMuted: boolean = false;
 
   /**
    * Component's host element
@@ -47,11 +47,19 @@ export class VidCom {
    */
   @State() isPlaying: boolean = false;
 
+  @State() currentTime: number = 0;
+
+  @State() duration: number;
+
   /**
    * Component's video element
    */
   get video(): HTMLVideoElement {
     return this.wrap.shadowRoot.querySelector('video')
+  }
+
+  get progressBar(): HTMLInputElement {
+    return this.wrap.shadowRoot.querySelector('.control-pane__progress');
   }
 
   /**
@@ -71,7 +79,6 @@ export class VidCom {
 
   @Watch('isAlwaysMuted')
   validatePermanentMute(newValue: boolean | string): void {
-    console.log(newValue)
     if (newValue === "") {
       this.isAlwaysMuted = true;
     }
@@ -81,10 +88,48 @@ export class VidCom {
   }
 
   componentWillLoad(): void {
+    this.validateAutoplay(this.autoplay);
     this.validatePermanentMute(this.isAlwaysMuted);
     if (this.autoplay) {
       this._markAsPlaying();
     }
+  }
+
+  componentDidLoad(): void {
+    this._subscribeToTimeupdate();
+  }
+
+  disconnectedCallback(): void {
+    // this.video.removeEventListener('timeupdate');
+  }
+
+  /**
+   * Adds event listener for video's `timeupdate` event
+   * @private
+   */
+  private _subscribeToTimeupdate(): void {
+    this.video.addEventListener('timeupdate', () => {
+      this.currentTime = this.video.currentTime;
+    }, false);
+  }
+
+  /**
+   * Handles the video scroll
+   * @private
+   */
+  private _handleVideoScroll(): void {
+    const time = Number(this.progressBar.value);
+
+    if (time > this.video.duration) {
+      this.video.currentTime = this.video.duration;
+      return
+    }
+
+    if (time < 0) {
+      this.video.currentTime = 0;
+      return
+    }
+    this.video.currentTime = time;
   }
 
   /**
@@ -157,18 +202,31 @@ export class VidCom {
         }
         {
           this.isMuted
-            ? <SoundOffButton class={`control control-pane__button ${this.isAlwaysMuted && 'control-pane__button_unavailable'}`} onClick={this._handleMutedButton.bind(this)} />
-            : <SoundOnButton class="control control-pane__button" onClick={this.mute.bind(this)} />
+            ? <SoundOffButton
+              class={`control control-pane__button ${this.isAlwaysMuted && 'control-pane__button_unavailable'}`}
+              onClick={this._handleMutedButton.bind(this)}/>
+            : <SoundOnButton class="control control-pane__button" onClick={this.mute.bind(this)}/>
         }
+      </div>
+      <div class="control-pane__column control-pane__column_center">
+        <input
+          type="range"
+          min="0"
+          max={this.video?.duration}
+          value={this.currentTime}
+          class="control-pane__progress"
+          onInput={this._handleVideoScroll.bind(this)}
+        />
       </div>
     </div>
   }
 
   render() {
     return <Host>
-      {this.poster && <img alt="video thumbnail" src={this.poster} loading="lazy" class="thumbnail" onClick={this._togglePlay.bind(this)}/>}
-      <video src={this.src} autoplay={this.autoplay} muted={this.isMuted} onClick={this._togglePlay.bind(this)} />
-      <span tabIndex={-1} class="play-overlay" />
+      {this.poster && <img alt="video thumbnail" src={this.poster} loading="lazy" class="thumbnail"
+                           onClick={this._togglePlay.bind(this)}/>}
+      <video src={this.src} autoplay={this.autoplay} muted={this.isMuted} onClick={this._togglePlay.bind(this)}/>
+      <span tabIndex={-1} class="play-overlay"/>
       {!this.isStarted && <PlayButton class="play-button control" onClick={this.play.bind(this)}/>}
       {this.isStarted && this._renderControlPane()}
     </Host>

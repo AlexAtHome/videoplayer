@@ -74,6 +74,7 @@ video {
 
 .control-pane__column {
   display: inline-flex;
+  padding: 0 8px;
 }
 
 .control-pane__column_center {
@@ -82,10 +83,17 @@ video {
 
 .control-pane__button {
   width: 36px;
-  margin: 0 8px;
+}
+
+.control-pane__button + .control-pane__button {
+  margin-left: 8px;
 }
 
 .control-pane__button_unavailable {
   cursor: not-allowed;
   opacity: .5;
+}
+
+.control-pane__progress {
+  width: 100%;
 }
