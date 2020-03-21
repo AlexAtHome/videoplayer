@@ -74,6 +74,7 @@ export class VidCom {
           ? <PlayButton class="control control-pane__button" onClick={this.play.bind(this)}/>
           : <PauseButton class="control control-pane__button" onClick={this.pause.bind(this)}/>
       }
+
     </div>
   }
 
