@@ -48,6 +48,10 @@ video {
   left: calc(50% - 32px);
 }
 
+.play-overlay {
+
+}
+
 .control-pane {
   position: absolute;
   z-index: 2;

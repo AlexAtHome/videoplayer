@@ -1,6 +1,6 @@
 import {h} from '@stencil/core'
 
-export const PlayButton = props => <span class={props.class} tabindex={props.tabindex || 1} onClick={props.onClick}>
+export const PlayButton = props => <span class={props.class} tabIndex={props.tabindex || 1} onClick={props.onClick}>
   <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px"
        viewBox="0 0 64 64" enable-background="new 0 0 64 64" xmlSpace="preserve" class=""><g><g>
 	<path
@@ -12,7 +12,7 @@ export const PlayButton = props => <span class={props.class} tabindex={props.tab
 </g></g> </svg>
 </span>;
 
-export const PauseButton = props => <span class={props.class} tabindex={1} onClick={props.onClick}>
+export const PauseButton = props => <span class={props.class} tabIndex={1} onClick={props.onClick}>
   <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px"
        viewBox="0 0 64 64" enable-background="new 0 0 64 64" xmlSpace="preserve" class=""><g><g>
 	<path
@@ -27,7 +27,7 @@ export const PauseButton = props => <span class={props.class} tabindex={1} onCli
 </g></g> </svg>
 </span>;
 
-export const SoundOffButton = props => <span class={props.class} tabindex={1} onClick={props.onClick}>
+export const SoundOffButton = props => <span class={props.class} tabIndex={1} onClick={props.onClick}>
   <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px"
        y="0px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xmlSpace="preserve"
        class=""><g><g>
@@ -40,7 +40,7 @@ export const SoundOffButton = props => <span class={props.class} tabindex={1} on
 </g></g> </svg>
 </span>;
 
-export const SoundOnButton = props => <span class={props.class} tabindex={1} onClick={props.onClick}>
+export const SoundOnButton = props => <span class={props.class} tabIndex={1} onClick={props.onClick}>
   <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px"
        y="0px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xmlSpace="preserve"><g><g>
 	<path

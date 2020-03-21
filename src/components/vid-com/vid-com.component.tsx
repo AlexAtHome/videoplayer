@@ -123,10 +123,15 @@ export class VidCom {
     </div>
   }
 
+  private async _togglePlay() {
+    return this.isPlaying ? this.pause() : this.play();
+  }
+
   render() {
     return <Host>
-      {this.poster && <img alt="video thumbnail" src={this.poster} loading="lazy" class="thumbnail"/>}
-      <video src={this.src} autoplay={this.autoplay} />
+      {this.poster && <img alt="video thumbnail" src={this.poster} loading="lazy" class="thumbnail" onClick={this._togglePlay.bind(this)}/>}
+      <video src={this.src} autoplay={this.autoplay} onClick={this._togglePlay.bind(this)} />
+      <span tabIndex={-1} class="play-overlay" />
       {!this.isStarted && <PlayButton class="play-button control" onClick={this.play.bind(this)}/>}
       {this.isStarted && this._renderControlPane()}
     </Host>
