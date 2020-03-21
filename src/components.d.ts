@@ -11,6 +11,7 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 export namespace Components {
   interface VidCom {
+    'autoplay': boolean;
     'mute': () => Promise<void>;
     /**
     * Pauses the video
@@ -47,6 +48,7 @@ declare global {
 
 declare namespace LocalJSX {
   interface VidCom {
+    'autoplay'?: boolean;
     /**
     * Video's thumbnail
     */
