@@ -84,3 +84,8 @@ video {
   width: 36px;
   margin: 0 8px;
 }
+
+.control-pane__button_unavailable {
+  cursor: not-allowed;
+  opacity: .5;
+}

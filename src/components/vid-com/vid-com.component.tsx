@@ -17,7 +17,15 @@ export class VidCom {
    */
   @Prop() poster: string;
 
+  /**
+   * Video's autoplay
+   */
   @Prop() autoplay: boolean;
+
+  /**
+   * Whether the video's sound is always disabled and can't be enabled
+   */
+  @Prop({ attribute: 'muted' }) isAlwaysMuted: boolean = false;
 
   /**
    * Component's host element
@@ -29,6 +37,9 @@ export class VidCom {
    */
   @State() isStarted: boolean = false;
 
+  /**
+   * Whether the video is muted right now
+   */
   @State() isMuted: boolean = false;
 
   /**
@@ -58,7 +69,19 @@ export class VidCom {
     }
   }
 
+  @Watch('isAlwaysMuted')
+  validatePermanentMute(newValue: boolean | string): void {
+    console.log(newValue)
+    if (newValue === "") {
+      this.isAlwaysMuted = true;
+    }
+    if (this.isAlwaysMuted) {
+      this.isMuted = true;
+    }
+  }
+
   componentWillLoad(): void {
+    this.validatePermanentMute(this.isAlwaysMuted);
     if (this.autoplay) {
       this._markAsPlaying();
     }
@@ -82,6 +105,16 @@ export class VidCom {
     this.isPlaying = false;
   }
 
+  private _handleMutedButton(): void {
+    if (!this.isAlwaysMuted) {
+      this.unmute();
+    }
+  }
+
+  private async _togglePlay() {
+    return this.isPlaying ? this.pause() : this.play();
+  }
+
   /**
    * Plays the video
    */
@@ -102,12 +135,12 @@ export class VidCom {
 
   @Method()
   async mute() {
-    this.video.muted = this.isMuted = true;
+    this.isMuted = true;
   }
 
   @Method()
   async unmute() {
-    this.video.muted = this.isMuted = false;
+    this.isMuted = false;
   }
 
   /**
@@ -124,21 +157,17 @@ export class VidCom {
         }
         {
           this.isMuted
-            ? <SoundOffButton class="control control-pane__button" onClick={this.unmute.bind(this)} />
+            ? <SoundOffButton class={`control control-pane__button ${this.isAlwaysMuted && 'control-pane__button_unavailable'}`} onClick={this._handleMutedButton.bind(this)} />
             : <SoundOnButton class="control control-pane__button" onClick={this.mute.bind(this)} />
         }
       </div>
     </div>
   }
 
-  private async _togglePlay() {
-    return this.isPlaying ? this.pause() : this.play();
-  }
-
   render() {
     return <Host>
       {this.poster && <img alt="video thumbnail" src={this.poster} loading="lazy" class="thumbnail" onClick={this._togglePlay.bind(this)}/>}
-      <video src={this.src} autoplay={this.autoplay} onClick={this._togglePlay.bind(this)} />
+      <video src={this.src} autoplay={this.autoplay} muted={this.isMuted} onClick={this._togglePlay.bind(this)} />
       <span tabIndex={-1} class="play-overlay" />
       {!this.isStarted && <PlayButton class="play-button control" onClick={this.play.bind(this)}/>}
       {this.isStarted && this._renderControlPane()}
