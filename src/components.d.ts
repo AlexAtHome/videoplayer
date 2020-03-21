@@ -12,6 +12,10 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface VidCom {
     /**
+    * Pauses the video
+    */
+    'pause': () => Promise<void>;
+    /**
     * Plays the video
     */
     'play': () => Promise<void>;

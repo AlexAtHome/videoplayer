@@ -1,5 +1,5 @@
 import {Component, Prop, Host, h, Method, Element, State} from '@stencil/core';
-import {PlayButton} from "../../utils/play";
+import {PauseButton, PlayButton} from "../../utils/controls";
 
 @Component({
   tag: 'vid-com',
@@ -18,13 +18,17 @@ export class VidCom {
   @Element() wrap: HTMLElement;
 
   /**
-   * Whether the video is played once
+   * Whether the video is played at least once
    */
   @State() isStarted: boolean = false;
 
   /**
+   * Whether the video is playing right now
+   */
+  @State() isPlaying: boolean = false;
+
+  /**
    * Component's video element
-   * @private
    */
   get video(): HTMLVideoElement {
     return this.wrap.shadowRoot.querySelector('video')
@@ -35,22 +39,35 @@ export class VidCom {
    */
   @Method()
   async play(): Promise<void> {
+    this.isStarted = true;
+    this.isPlaying = true;
     return this.video.play();
   }
 
   /**
-   * Play button click handler
-   * @private
+   * Pauses the video
    */
-  private _playButtonClickHandler(): void {
-    this.isStarted = true;
-    this.play();
+  @Method()
+  async pause(): Promise<void> {
+    this.isPlaying = false;
+    return this.video.pause();
+  }
+
+  private _renderControlPane() {
+    return <div class="control-pane">
+      {
+        this.video.paused
+          ? <PlayButton class="control control-pane__button" onClick={this.play.bind(this)}/>
+          : <PauseButton class="control control-pane__button" onClick={this.pause.bind(this)}/>
+      }
+    </div>
   }
 
   render() {
     return <Host>
-      <video src={this.src} />
-      {!this.isStarted && <PlayButton class="play-button control" onClick={this._playButtonClickHandler.bind(this)} />}
+      <video src={this.src}/>
+      {!this.isStarted && <PlayButton class="play-button control" onClick={this.play.bind(this)}/>}
+      {this.isStarted && this._renderControlPane()}
     </Host>
   }
 }
