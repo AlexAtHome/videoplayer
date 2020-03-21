@@ -43,6 +43,14 @@ export class VidCom {
     return this.wrap.shadowRoot.querySelector('video')
   }
 
+  /**
+   * Component thumbnail's element
+   * @private
+   */
+  private get _thumbnailElement(): HTMLImageElement {
+    return this.wrap.shadowRoot.querySelector('.thumbnail');
+  }
+
   @Watch('autoplay')
   validateAutoplay(newValue: boolean | string): void {
     if (newValue === "") {
@@ -63,7 +71,7 @@ export class VidCom {
   private _markAsPlaying(): void {
     this.isStarted = true;
     this.isPlaying = true;
-    this.poster = undefined;
+    this._thumbnailElement?.remove();
   }
 
   /**
