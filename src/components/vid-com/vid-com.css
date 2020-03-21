@@ -13,3 +13,18 @@ video {
   bottom: 0;
   z-index: 1;
 }
+
+.control {
+  cursor: pointer;
+  z-index: 5;
+}
+
+:host(:not(:hover)) .control {
+  visibility: hidden;
+}
+
+.play-button {
+  position: absolute;
+  top: calc(50% - 32px);
+  left: calc(50% - 32px);
+}

@@ -12,7 +12,11 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 export namespace Components {
   interface VidCom {
     /**
-    * The first name
+    * Plays the video
+    */
+    'play': () => Promise<void>;
+    /**
+    * Video's URL
     */
     'src': string;
   }
@@ -34,7 +38,7 @@ declare global {
 declare namespace LocalJSX {
   interface VidCom {
     /**
-    * The first name
+    * Video's URL
     */
     'src'?: string;
   }
