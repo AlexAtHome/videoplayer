@@ -20,6 +20,10 @@ export namespace Components {
     */
     'play': () => Promise<void>;
     /**
+    * Video's thumbnail
+    */
+    'poster': string;
+    /**
     * Video's URL
     */
     'src': string;
@@ -41,6 +45,10 @@ declare global {
 
 declare namespace LocalJSX {
   interface VidCom {
+    /**
+    * Video's thumbnail
+    */
+    'poster'?: string;
     /**
     * Video's URL
     */
