@@ -33,12 +33,19 @@ video {
   transition: opacity .3s ease-in-out;
 }
 
+.control__wrap {
+  width: 36px;
+  height: 36px;
+  display: block;
+  position: relative;
+}
+
 .control svg {
   width: 100%;
 }
 
 :host(:not(:hover)) .control {
-  opacity: 0;
+  /* opacity: 0; */
 }
 
 .play-button {
@@ -69,7 +76,7 @@ video {
 }
 
 :host(:not(:hover)) .control-pane {
-  opacity: 0;
+  /* opacity: 0; */
 }
 
 .control-pane__column {
@@ -85,7 +92,9 @@ video {
   width: 36px;
 }
 
-.control-pane__button + .control-pane__button {
+.control-pane__button + .control-pane__button,
+.control-pane__button + .control__wrap,
+.control__wrap + .control-pane__button {
   margin-left: 8px;
 }
 
@@ -96,4 +105,38 @@ video {
 
 .control-pane__progress {
   width: 100%;
+}
+
+.volume-control__wrap {
+  width: 100px;
+  /* height: 30px; */
+  background-color: rgba(0, 0, 0, 0.51);
+  border-radius: 3px;
+  position: absolute;
+  bottom: 100%;
+  margin-left: 15px;
+  padding: 10px 12px 10px 5px;
+  box-sizing: border-box;
+  transform-origin: left;
+  transform: rotate(-90deg);
+  transition: opacity .3s ease-in-out;
+}
+
+.volume-control:not(:hover) .volume-control__wrap {
+  opacity: 0;
+}
+
+.volume-control__wrap::after {
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: 1;
+  height: 15px;
+  width: 100%;
+  bottom: -15px;
+}
+
+.volume-control__input {
+  width: 100%;
+  height: 10px;
 }

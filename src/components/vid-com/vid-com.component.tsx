@@ -51,6 +51,8 @@ export class VidCom {
 
   @State() duration: number;
 
+  @State() volume: number = 60;
+
   /**
    * Component's video element
    */
@@ -60,6 +62,10 @@ export class VidCom {
 
   get progressBar(): HTMLInputElement {
     return this.wrap.shadowRoot.querySelector('.control-pane__progress');
+  }
+
+  get volumeBar(): HTMLInputElement {
+    return this.wrap.shadowRoot.querySelector('.volume-control__input');
   }
 
   /**
@@ -133,6 +139,21 @@ export class VidCom {
   }
 
   /**
+   * Volume change event listener
+   * @private
+   */
+  private _changeVolume(): void {
+    this.volume = Number(this.volumeBar.value);
+    this.video.volume = this.volume / 100;
+    if (this.volume === 0 && !this.isMuted) {
+      this.mute()
+    }
+    if (this.volume > 0 && this.isMuted) {
+      this.unmute()
+    }
+  }
+
+  /**
    * Marks the component's video as playing right now
    * @private
    */
@@ -181,11 +202,13 @@ export class VidCom {
   @Method()
   async mute() {
     this.isMuted = true;
+    this.volume = 0;
   }
 
   @Method()
   async unmute() {
     this.isMuted = false;
+    this.volume = this.video.volume * 100;
   }
 
   /**
@@ -200,13 +223,26 @@ export class VidCom {
             ? <PauseButton class="control control-pane__button" onClick={this.pause.bind(this)}/>
             : <PlayButton class="control control-pane__button" onClick={this.play.bind(this)}/>
         }
-        {
-          this.isMuted
-            ? <SoundOffButton
-              class={`control control-pane__button ${this.isAlwaysMuted && 'control-pane__button_unavailable'}`}
-              onClick={this._handleMutedButton.bind(this)}/>
-            : <SoundOnButton class="control control-pane__button" onClick={this.mute.bind(this)}/>
-        }
+        <div class="control__wrap volume-control">
+          {
+            this.isMuted
+              ? <SoundOffButton
+                class={`control control-pane__button ${this.isAlwaysMuted && 'control-pane__button_unavailable'}`}
+                onClick={this._handleMutedButton.bind(this)}/>
+              : <SoundOnButton class="control control-pane__button" onClick={this.mute.bind(this)}/>
+          }
+
+          {!this.isAlwaysMuted && <div class="volume-control__wrap">
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={this.volume}
+              class="volume-control__input"
+              onInput={this._changeVolume.bind(this)}
+            />
+          </div>}
+        </div>
       </div>
       <div class="control-pane__column control-pane__column_center">
         <input
